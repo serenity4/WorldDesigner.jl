@@ -1,9 +1,13 @@
 name = "WorldDesigner"
 uuid = "b8585d12-3b33-4ade-88c3-aec6786ed675"
-authors = ["Cédric BELMANT"]
 version = "0.1.0"
+authors = ["Cédric BELMANT"]
+
+[deps]
+Anvil = "3680adac-b468-4089-a5b4-2beb8414818d"
 
 [compat]
+Anvil = "0.1.0"
 julia = "1.10"
 
 [extras]

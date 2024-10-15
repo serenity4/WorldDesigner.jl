@@ -1,5 +1,10 @@
 module WorldDesigner
 
-# Write your package code here.
+using Anvil
+using Anvil: Text
+
+include("application.jl")
+
+export main
 
 end
