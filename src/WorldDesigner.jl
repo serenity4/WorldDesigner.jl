@@ -5,6 +5,10 @@ using Anvil: Text
 
 include("application.jl")
 
-export main
+function __init__()
+  ASSET_DIRECTORY[] = joinpath(dirname(@__DIR__), "assets")
+end
+
+export main, Anvil
 
 end

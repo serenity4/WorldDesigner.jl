@@ -5,6 +5,12 @@
     },
     {
       "path": "../Anvil"
+    },
+    {
+      "path": "../ShaderLibrary"
+    },
+    {
+      "path": "../Lava"
     }
   ],
   "settings": {}

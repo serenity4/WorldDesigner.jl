@@ -1,9 +1,20 @@
-function start_app()
-  @set_name side_panel = Rectangle((0.8, 1.8), RGB(0.01, 0.01, 0.01))
+main(; async = false) = Anvil.main(start_app; async)
 
-  @set_name save_button = Button((0.3, 0.1); text = Text("Save")) do
-    save_button.background.color = rand(RGB{Float32})
+function start_app()
+  @set_name characters_tab = Image(get_texture("tab-left.png"), 0.5)
+  @set_name characters_tab_text = Text(styled"{black:Characters}"; font = "MedievalSharp", size = 40)
+  add_constraint(attach(characters_tab_text |> at(:edge, :top), characters_tab |> at(:edge, :top) |> at(-0.035)))
+  add_constraint(attach(characters_tab_text |> at(:edge, :left), characters_tab |> at(:edge, :left) |> at(0.06)))
+  @set_name places_tab = Image(get_texture("tab-left.png"), 0.5)
+  @set_name events_tab = Image(get_texture("tab-left.png"), 0.5)
+  left_tabs = EntityID[characters_tab, places_tab, events_tab]
+
+  @set_name central_panel = Rectangle((2.0, 1.8), RGB(0.01, 0.01, 0.01))
+  for left_tab in left_tabs
+    add_constraint(attach(left_tab |> at(:edge, :right), central_panel |> at(:edge, :left)))
   end
+  add_constraint(attach(characters_tab |> at(:edge, :top), central_panel |> at(:edge, :top) |> at(-0.2)))
+  add_constraint(distribute(left_tabs, :vertical, 0.1, :geometry))
 
   # File menu.
   file_menu_head = Button(() -> collapse!(file_menu), (0.3, 0.1); text = Text("File"))
@@ -23,37 +34,4 @@ function start_app()
   end
   @set_name edit_menu = Menu(edit_menu_head, [edit_menu_item_1], 'E')
   add_constraint(attach(edit_menu |> at(:corner, :top_left), file_menu |> at(:corner, :top_right)))
-
-  vline_left = side_panel |> at(:edge, :left) |> at(0.2)
-  vline_right = vline_left |> at(0.05)
-  vspacing = 0.1
-
-  add_constraint(attach(side_panel |> at(-0.4, 0.0), app.windows[app.window] |> at(0.5, 0.0)))
-
-  @set_name node_name_text = Text("Name")
-  @set_name node_name_value = Rectangle((0.1, 0.04), RGB(0.2, 0.2, 0.2))
-  @set_name node_color_text = Text("Color")
-  @set_name node_color_value = Rectangle((0.1, 0.04), RGB(0.3, 0.2, 0.9))
-  @set_name node_hide_text = Text("Hide")
-  @set_name node_hide_value = Checkbox(_ -> nothing)
-  left_column = EntityID[
-    node_name_text,
-    node_color_text,
-    node_hide_text,
-  ]
-  right_column = EntityID[
-    node_name_value,
-    node_color_value,
-    node_hide_value,
-  ]
-  add_constraint(align(left_column .|> at(:edge, :right), :vertical, vline_left))
-  add_constraint(align(right_column .|> at(:edge, :left), :vertical, vline_right))
-
-  for column in (left_column, right_column)
-    add_constraint(distribute(column, :vertical, vspacing, :point))
-  end
-
-  add_constraint(attach(save_button, left_column[end] |> at(0.2, -0.2)))
 end
-
-main(; async = false) = Anvil.main(start_app; async)
