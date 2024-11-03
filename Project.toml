@@ -1,13 +1,15 @@
 name = "WorldDesigner"
 uuid = "b8585d12-3b33-4ade-88c3-aec6786ed675"
-version = "0.1.0"
 authors = ["Cédric BELMANT"]
+version = "0.1.0"
 
 [deps]
 Anvil = "3680adac-b468-4089-a5b4-2beb8414818d"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
 [compat]
 Anvil = "0.1.0"
+Dates = "1.11.0"
 julia = "1.10"
 
 [extras]

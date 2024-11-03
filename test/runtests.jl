@@ -13,5 +13,11 @@ ENV["JULIA_DEBUG"] = "Anvil"
 main()
 
 @testset "WorldDesigner.jl" begin
-    # Write your tests here.
+  default_tab = "Characters"
+  characters = [
+    CharacterInfo("Unknown"),
+    CharacterInfo("Kaven"; portrait = "kaven.jpg"),
+  ]
+  state = ApplicationState(default_tab, characters)
+  main(state)
 end
