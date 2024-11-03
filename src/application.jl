@@ -6,7 +6,11 @@ function start_app(state::ApplicationState)
   events_tab = add_left_tab(state, "Events")
   left_tabs = EntityID[characters_tab, places_tab, events_tab]
 
-  @set_name central_panel = Rectangle((20, 18), RGB(0.03, 0.03, 0.02))
+  window = app.windows[app.window]
+  (; width, height) = get_geometry(window)
+  left_margin = 6
+  @set_name central_panel = Rectangle((width - left_margin, height), RGB(0.03, 0.03, 0.02))
+  place(central_panel |> at(:edge, :left), window |> at(:edge, :left) |> at((left_margin, 0)))
   for left_tab in left_tabs
     place(left_tab |> at(:edge, :right), central_panel |> at(:edge, :left))
   end

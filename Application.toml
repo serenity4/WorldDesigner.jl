@@ -1,0 +1,7 @@
+[window]
+title = "WorldDesigner"
+icon_title = "WorldDesigner"
+# icon = ...
+
+[window.decorations]
+use_default = false
