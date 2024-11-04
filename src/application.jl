@@ -9,7 +9,7 @@ function start_app(state::ApplicationState)
   window = app.windows[app.window]
   (; width, height) = get_geometry(window)
   left_margin = 6
-  @set_name central_panel = Rectangle((width - left_margin, height), RGB(0.03, 0.03, 0.02))
+  @set_name central_panel = Image((width - left_margin, height), get_texture("parchment-background-1.jpg"); parameters = ImageParameters(; tiled = true, scale = 0.03))
   place(central_panel |> at(:edge, :left), window |> at(:edge, :left) |> at((left_margin, 0)))
   for left_tab in left_tabs
     place(left_tab |> at(:edge, :right), central_panel |> at(:edge, :left))
@@ -59,13 +59,13 @@ end
 Anvil.to_object(engine::LayoutEngine, entry::CharacterListEntry) = Group(engine, entry.name, entry.icon)
 
 function CharacterListEntry(info::CharacterInfo)
-  name = Text(info.name; font = "MedievalSharp", size = 0.7)
+  name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 0.7)
   icon = character_icon(info.portrait)
   place_after(name, icon; spacing = 1.0)
   CharacterListEntry(name, icon)
 end
 
-character_icon(asset::String) = Image((3, 3), texture_file(asset); is_opaque = true)
+character_icon(asset::String) = Image((3, 3), texture_file(asset); parameters = ImageParameters(is_opaque = true))
 character_icon(::Nothing) = character_icon_placeholder()
 function character_icon_placeholder()
   character_icon("character-icon-placeholder.png")
