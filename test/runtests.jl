@@ -10,8 +10,6 @@ ENV["JULIA_DEBUG"] = "Anvil"
 # ENV["ANVIL_LOG_KEY_PRESS"] = true
 # ENV["ANVIL_RELEASE"] = true # may circumvent issues with validation layers
 
-main()
-
 @testset "WorldDesigner.jl" begin
   default_tab = "Characters"
   characters = [

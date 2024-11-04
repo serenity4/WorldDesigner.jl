@@ -9,7 +9,7 @@ function start_app(state::ApplicationState)
   window = app.windows[app.window]
   (; width, height) = get_geometry(window)
   left_margin = 6
-  @set_name central_panel = Image((width - left_margin, height), get_texture("parchment-background-1.jpg"); parameters = ImageParameters(; tiled = true, scale = 0.03))
+  @set_name central_panel = Rectangle((width - left_margin, height), "parchment-background-1.jpg", ImageParameters(tiled = true, scale = 0.03))
   place(central_panel |> at(:edge, :left), window |> at(:edge, :left) |> at((left_margin, 0)))
   for left_tab in left_tabs
     place(left_tab |> at(:edge, :right), central_panel |> at(:edge, :left))
@@ -34,7 +34,7 @@ function start_app(state::ApplicationState)
 end
 
 function add_left_tab(state, name)
-  @set_name tab = Image(get_texture("tab-left.png"), 6)
+  @set_name tab = Rectangle("tab-left.png", ImageParameters(scale = 6))
   color = state.active_tab == name ? :red : :black
   @set_name text = Text(styled"{$color:$name}"; font = "MedievalSharp", size = 0.7)
   put_behind(tab, text)
@@ -54,7 +54,7 @@ end
 # XXX: Make that a widget?
 struct CharacterListEntry
   name::Text 
-  icon::Image
+  icon::Rectangle
 end
 Anvil.to_object(engine::LayoutEngine, entry::CharacterListEntry) = Group(engine, entry.name, entry.icon)
 
@@ -65,7 +65,7 @@ function CharacterListEntry(info::CharacterInfo)
   CharacterListEntry(name, icon)
 end
 
-character_icon(asset::String) = Image((3, 3), texture_file(asset); parameters = ImageParameters(is_opaque = true))
+character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
 character_icon(::Nothing) = character_icon_placeholder()
 function character_icon_placeholder()
   character_icon("character-icon-placeholder.png")
