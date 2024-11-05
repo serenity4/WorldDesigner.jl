@@ -4,4 +4,4 @@ icon_title = "WorldDesigner"
 # icon = ...
 
 [window.decorations]
-use_default = false
+use_default = true

@@ -7,14 +7,15 @@ function start_app(state::ApplicationState)
   left_tabs = EntityID[characters_tab, places_tab, events_tab]
 
   window = app.windows[app.window]
-  (; width, height) = get_geometry(window)
-  left_margin = 6
-  @set_name central_panel = Rectangle((width - left_margin, height), "parchment-background-1.jpg", ImageParameters(tiled = true, scale = 0.03))
-  place(central_panel |> at(:edge, :left), window |> at(:edge, :left) |> at((left_margin, 0)))
+  @set_name central_panel = Rectangle((1, 1), "parchment-background-1.jpg", ImageParameters(tiled = true, scale = 0.03))
+  pin(central_panel, :left, at(window, :left); offset = 6)
+  pin(central_panel, :right, at(window, :right))
+  pin(central_panel, :bottom, at(window, :bottom))
+  pin(central_panel, :top, at(window, :top))
   for left_tab in left_tabs
-    place(left_tab |> at(:edge, :right), central_panel |> at(:edge, :left))
+    place(left_tab |> at(:right), central_panel |> at(:left))
   end
-  align(characters_tab |> at(:edge, :top), :horizontal, central_panel |> at(:edge, :top) |> at(-2))
+  align(characters_tab |> at(:top), :horizontal, central_panel |> at(:top) |> at(-2))
   distribute(left_tabs, :vertical, 1, :geometry)
   generate_active_tab(state)
 
@@ -24,13 +25,13 @@ function start_app(state::ApplicationState)
   file_menu_item_2 = MenuItem(Text("Open..."), (3, 1)) do; end
   file_menu_item_3 = MenuItem(Anvil.exit, Text("Exit"), (3, 1), 'x')
   @set_name file_menu = Menu(file_menu_head, [file_menu_item_1, file_menu_item_2, file_menu_item_3], 'F')
-  place(file_menu |> at(:corner, :top_left), app.windows[app.window] |> at(:corner, :top_left))
+  place(file_menu |> at(:top_left), app.windows[app.window] |> at(:top_left))
 
   # Edit menu.
   edit_menu_head = Button(() -> collapse!(edit_menu), (3, 1); text = Text("Edit"))
   edit_menu_item_1 = MenuItem(Text("Regenerate"), (3, 1)) do; end
   @set_name edit_menu = Menu(edit_menu_head, [edit_menu_item_1], 'E')
-  place(edit_menu |> at(:corner, :top_left), file_menu |> at(:corner, :top_right))
+  place(edit_menu |> at(:top_left), file_menu |> at(:top_right))
 end
 
 function add_left_tab(state, name)
@@ -75,9 +76,9 @@ function generate_characters_tab(state::ApplicationState)
   @get_widget central_panel
   isempty(state.characters) && return
   list = map(CharacterListEntry, state.characters)
-  place(list[1] |> at(:edge, :top), central_panel |> at(:edge, :top) |> at(-5))
+  place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -5)))
   for item in list
-    align(item |> at(:edge, :left), :vertical, list[1] |> at(:edge, :left))
+    align(item |> at(:left), :vertical, list[1] |> at(:left))
   end
   distribute(list, :vertical, 1, :geometry)
 end
