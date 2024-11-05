@@ -52,18 +52,16 @@ function generate_active_tab(state::ApplicationState)
   state.active_tab == "Characters" && return generate_characters_tab(state)
 end
 
-# XXX: Make that a widget?
-struct CharacterListEntry
-  name::Text 
-  icon::Rectangle
-end
-Anvil.to_object(engine::LayoutEngine, entry::CharacterListEntry) = Group(engine, entry.name, entry.icon)
-
-function CharacterListEntry(info::CharacterInfo)
+function character_list_entry(info::CharacterInfo)
   name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 0.7)
   icon = character_icon(info.portrait)
+  background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   place_after(name, icon; spacing = 1.0)
-  CharacterListEntry(name, icon)
+  put_behind(background, name)
+  pin(background, :top_left, at(icon, :top_right))
+  pin(background, :bottom_left, at(icon, :bottom_right))
+  pin(background, :right, at(get_widget(:central_panel), :right); offset = -2)
+  Group(name, icon, background)
 end
 
 character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
@@ -75,7 +73,7 @@ end
 function generate_characters_tab(state::ApplicationState)
   @get_widget central_panel
   isempty(state.characters) && return
-  list = map(CharacterListEntry, state.characters)
+  list = map(character_list_entry, state.characters)
   place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -5)))
   for item in list
     align(item |> at(:left), :vertical, list[1] |> at(:left))
