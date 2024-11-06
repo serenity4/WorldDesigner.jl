@@ -43,7 +43,7 @@ function add_left_tab(state, name)
     previous_tab == name && (text.text = styled"{black:$name}")
     active_tab == name && (text.text = styled"{red:$name}")
   end
-  set_input_handler(tab, InputComponent(input -> is_left_click(input) && (state.active_tab = name), BUTTON_PRESSED, NO_ACTION))
+  intercept_inputs(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
   place(text, tab |> at(0.2, 0))
   tab
 end
