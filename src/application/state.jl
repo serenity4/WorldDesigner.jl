@@ -22,6 +22,6 @@ remove_widget(widget, widgets...) = remove_widget!(app.state, widget, widgets...
 remove_widgets(widget, widgets...) = remove_widgets!(app.state, widget, widgets...)
 
 function wipe_central_panel()
-  set = app_state().interaction_sets[INTERACTION_SET_CENTRAL_PANEL]
+  set = app_state().interaction_sets[:central_panel]
   wipe!(set)
 end

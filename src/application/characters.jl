@@ -17,7 +17,7 @@ function character_list_entry(info::CharacterInfo)
   @set_name namespace background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   add_callback(background, BUTTON_PRESSED) do input
     wipe_central_panel()
-    @with INTERACTION_SET => INTERACTION_SET_CENTRAL_PANEL generate_character_tab(info)
+    @with INTERACTION_SET => :central_panel generate_character_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
   put_behind(background, icon)
@@ -36,11 +36,13 @@ function character_icon_placeholder()
 end
 
 function generate_character_tab(info::CharacterInfo)
+  namespace = "character/$(info.name)"
   @get_widget central_panel
-  image = Rectangle((1, 1), RGB(0.9, 0.3, 0.8))
-  pin(image, :bottom_left, at(central_panel, :bottom_left))
-  pin(image, :bottom_right, at(central_panel, :bottom_right))
-  pin(image, :top_left, at(central_panel, :top_left))
-  pin(image, :top_right, at(central_panel, :top_right))
-  add_widget(image)
+  @set_name go_back_arrow = Rectangle((3, 3), texture_file("go-back-arrow.jpg"), ImageParameters(is_opaque = true))
+  place(at(go_back_arrow, :top_left), at(central_panel, :top_left) |> at((2, -2)))
+  add_callback(go_back_arrow, BUTTON_PRESSED) do input
+    wipe_central_panel()
+    @with INTERACTION_SET => :central_panel generate_characters_tab!(app.state)
+  end
+  add_widgets(go_back_arrow)
 end

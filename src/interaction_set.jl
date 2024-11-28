@@ -11,8 +11,6 @@ InteractionSet() = InteractionSet(Set{Widget}())
   Base.empty!(_)
 end
 
-const INTERACTION_SET_CENTRAL_PANEL = :central_panel
-
 function wipe!(set::InteractionSet)
   for widget in set
     delete_widget(widget)
