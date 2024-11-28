@@ -18,4 +18,4 @@ ENV["JULIA_DEBUG"] = "Anvil"
   ]
   state = ApplicationState(default_tab, characters)
   main(state)
-end
+end;

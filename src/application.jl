@@ -40,11 +40,11 @@ function add_left_tab(state, name)
   @set_name text = Text(styled"{$color:$name}"; font = "MedievalSharp", size = 0.7)
   put_behind(tab, text)
   observe!(state, :active_tab) do previous_tab, active_tab
-    previous_tab == name && (text.text = styled"{black:$name}")
-    active_tab == name && (text.text = styled"{red:$name}")
+    previous_tab == name && (text.value = styled"{black:$name}")
+    active_tab == name && (text.value = styled"{red:$name}")
   end
-  intercept_inputs(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
-  place(text, tab |> at(0.2, 0))
+  add_callback(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
+  place(text |> at(:center), tab |> at(0.2, 0))
   tab
 end
 
@@ -54,8 +54,9 @@ end
 
 function character_list_entry(info::CharacterInfo)
   name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 0.7)
-  icon = character_icon(info.portrait)
+  @set_name icon = character_icon(info.portrait)
   background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
+  put_behind(background, icon)
   place_after(name, icon; spacing = 1.0)
   put_behind(background, name)
   pin(background, :top_left, at(icon, :top_right))
