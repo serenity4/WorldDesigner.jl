@@ -31,9 +31,11 @@ end
 
 character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
 character_icon(::Nothing) = character_icon_placeholder()
-function character_icon_placeholder()
-  character_icon("character-icon-placeholder.png")
-end
+character_icon_placeholder() = character_icon("character-icon-placeholder.png")
+
+character_portrait(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
+character_portrait(::Nothing) = character_portrait_placeholder()
+character_portrait_placeholder() = character_portrait("character-icon-placeholder.png")
 
 function regenerate_characters_tab(token = nothing)
   wipe_central_panel()
@@ -46,11 +48,20 @@ end
 
 function generate_character_tab(info::CharacterInfo)
   namespace = "character/$(info.name)"
-  @get_widget central_panel
-  @set_name go_back_arrow = Rectangle((2, 2), texture_file("go-back-arrow.jpg"), ImageParameters(is_opaque = true))
-  place(at(go_back_arrow, :top_left), at(central_panel, :top_left) |> at((1, -1)))
+  panel = @get_widget central_panel
+
+  @set_name namespace go_back_arrow = Rectangle((2, 2), texture_file("go-back-arrow.jpg"), ImageParameters(is_opaque = true))
+  place(at(go_back_arrow, :top_left), at(panel, :top_left) |> at((1, -1)))
   token = Ref{Optional{KeyBindingsToken}}(nothing)
   token[] = bind([key"backspace", key"escape"] .=> () -> regenerate_characters_tab(token))
   add_callback(input -> regenerate_characters_tab(token), go_back_arrow, BUTTON_PRESSED)
-  add_widgets(go_back_arrow)
+
+  portrait = character_portrait(info.portrait)
+  pin(portrait, :left, at(panel, :left); offset = 3)
+  pin(portrait, :top, at(panel, :top); offset = -6)
+  pin(portrait, :bottom, at(panel, :bottom); offset = 6)
+  window = app.windows[app.window]
+  pin(portrait, :right, at(window, :center); offset = -3)
+
+  add_widgets(go_back_arrow, portrait)
 end
