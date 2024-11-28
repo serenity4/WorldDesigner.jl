@@ -35,14 +35,22 @@ function character_icon_placeholder()
   character_icon("character-icon-placeholder.png")
 end
 
+function regenerate_characters_tab(token = nothing)
+  wipe_central_panel()
+  @with INTERACTION_SET => :central_panel generate_characters_tab!(app.state)
+  isnothing(token) && return
+  token[] === nothing && return
+  unbind(token[])
+  token[] = nothing
+end
+
 function generate_character_tab(info::CharacterInfo)
   namespace = "character/$(info.name)"
   @get_widget central_panel
-  @set_name go_back_arrow = Rectangle((3, 3), texture_file("go-back-arrow.jpg"), ImageParameters(is_opaque = true))
-  place(at(go_back_arrow, :top_left), at(central_panel, :top_left) |> at((2, -2)))
-  add_callback(go_back_arrow, BUTTON_PRESSED) do input
-    wipe_central_panel()
-    @with INTERACTION_SET => :central_panel generate_characters_tab!(app.state)
-  end
+  @set_name go_back_arrow = Rectangle((2, 2), texture_file("go-back-arrow.jpg"), ImageParameters(is_opaque = true))
+  place(at(go_back_arrow, :top_left), at(central_panel, :top_left) |> at((1, -1)))
+  token = Ref{Optional{KeyBindingsToken}}(nothing)
+  token[] = bind([key"backspace", key"escape"] .=> () -> regenerate_characters_tab(token))
+  add_callback(input -> regenerate_characters_tab(token), go_back_arrow, BUTTON_PRESSED)
   add_widgets(go_back_arrow)
 end
