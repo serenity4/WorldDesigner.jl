@@ -56,12 +56,15 @@ function generate_character_tab(info::CharacterInfo)
   token[] = bind([key"backspace", key"escape"] .=> () -> regenerate_characters_tab(token))
   add_callback(input -> regenerate_characters_tab(token), go_back_arrow, BUTTON_PRESSED)
 
-  portrait = character_portrait(info.portrait)
+  @set_name namespace portrait = character_portrait(info.portrait)
   pin(portrait, :left, at(panel, :left); offset = 3)
   pin(portrait, :top, at(panel, :top); offset = -6)
   pin(portrait, :bottom, at(panel, :bottom); offset = 6)
-  window = app.windows[app.window]
-  pin(portrait, :right, at(window, :center); offset = -3)
+  pin(portrait, :right, at(panel, :center); offset = -3)
 
-  add_widgets(go_back_arrow, portrait)
+  @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0)
+  place(at(name, :left), at(panel, :center) |> at(5, 0))
+  align(at(name, :top), :horizontal, at(go_back_arrow, :top) |> at(0, -4))
+
+  add_widgets(go_back_arrow, portrait, name)
 end
