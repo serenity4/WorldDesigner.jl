@@ -19,8 +19,8 @@ include("application/main.jl")
 include("application/characters.jl")
 
 function __init__()
-  APPLICATION_DIRECTORY[] = joinpath(dirname(@__DIR__))
-  ASSET_DIRECTORY[] = joinpath(dirname(@__DIR__), "assets")
+  Anvil.APPLICATION_DIRECTORY = joinpath(dirname(@__DIR__))
+  Anvil.ASSET_DIRECTORY = joinpath(dirname(@__DIR__), "assets")
 end
 
 export
