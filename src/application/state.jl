@@ -11,17 +11,19 @@ get_state() = app.state::ApplicationState
 
 const INTERACTION_SET = ScopedValue{Symbol}()
 
-add_widget!(state, widget) = push!(get!(InteractionSet, state.interaction_sets, INTERACTION_SET[]), widget)
+interaction_set(state::ApplicationState, set::Symbol) = get!(InteractionSet, state.interaction_sets, set)
+
+add_widget!(state, widget) = push!(interaction_set(state, INTERACTION_SET[]), widget)
 add_widgets!(state, widget, widgets...) = for widget in (widget, widgets...) add_widget!(state, widget) end
 add_widget(widget, widgets...) = add_widget!(app.state, widget, widgets...)
 add_widgets(widget, widgets...) = add_widgets!(app.state, widget, widgets...)
 
-remove_widget!(state, widget) = delete!(state.interaction_sets[INTERACTION_SET[]], widget)
+remove_widget!(state, widget) = delete!(interaction_set(state.interaction_sets, INTERACTION_SET[]), widget)
 remove_widgets!(state, widget, widgets...) = for widget in (widget, widgets...) remove_widget!(state, widget) end
 remove_widget(widget, widgets...) = remove_widget!(app.state, widget, widgets...)
 remove_widgets(widget, widgets...) = remove_widgets!(app.state, widget, widgets...)
 
 function wipe_central_panel()
-  set = get_state().interaction_sets[:central_panel]
+  set = interaction_set(get_state(), :central_panel)
   wipe!(set)
 end
