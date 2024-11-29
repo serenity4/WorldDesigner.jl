@@ -7,7 +7,7 @@ end
 ApplicationState(active_tab, characters) = ApplicationState(active_tab, characters, Dict())
 ApplicationState() = ApplicationState("Characters", [])
 
-app_state() = app.state::ApplicationState
+get_state() = app.state::ApplicationState
 
 const INTERACTION_SET = ScopedValue{Symbol}()
 
@@ -22,6 +22,6 @@ remove_widget(widget, widgets...) = remove_widget!(app.state, widget, widgets...
 remove_widgets(widget, widgets...) = remove_widgets!(app.state, widget, widgets...)
 
 function wipe_central_panel()
-  set = app_state().interaction_sets[:central_panel]
+  set = get_state().interaction_sets[:central_panel]
   wipe!(set)
 end

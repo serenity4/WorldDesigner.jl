@@ -33,7 +33,7 @@ character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImagePara
 character_icon(::Nothing) = character_icon_placeholder()
 character_icon_placeholder() = character_icon("character-icon-placeholder.png")
 
-character_portrait(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
+character_portrait(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true, mode = ImageModeCropped()))
 character_portrait(::Nothing) = character_portrait_placeholder()
 character_portrait_placeholder() = character_portrait("character-icon-placeholder.png")
 
@@ -62,9 +62,17 @@ function generate_character_tab(info::CharacterInfo)
   pin(portrait, :bottom, at(panel, :bottom); offset = 6)
   pin(portrait, :right, at(panel, :center); offset = -3)
 
-  @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0)
+  @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0, editable = true, on_edit = name -> update_character_info(info; name))
   place(at(name, :left), at(panel, :center) |> at(5, 0))
   align(at(name, :top), :horizontal, at(go_back_arrow, :top) |> at(0, -4))
 
   add_widgets(go_back_arrow, portrait, name)
+end
+
+function update_character_info(info::CharacterInfo; kwargs...)
+  state = get_state()
+  i = findfirst(==(info), state.characters)
+  isnothing(i) && return false
+  state.characters[i] = setproperties(info, NamedTuple(kwargs))
+  true
 end
