@@ -18,9 +18,22 @@ include("application/state.jl")
 include("application/main.jl")
 include("application/characters.jl")
 
+function define_theme()
+  theme_file = joinpath(@__DIR__, "theme.jl")
+  Main = Base.active_module()
+  if isdefined(Main, :Revise)
+    Main.Revise.includet(@__MODULE__(), theme_file)
+  else
+    include("theme.jl")
+  end
+end
+
 function __init__()
-  Anvil.APPLICATION_DIRECTORY = joinpath(dirname(@__DIR__))
-  Anvil.ASSET_DIRECTORY = joinpath(dirname(@__DIR__), "assets")
+  @eval Anvil begin
+    APPLICATION_DIRECTORY = joinpath(dirname(@__DIR__))
+    ASSET_DIRECTORY = joinpath(dirname(@__DIR__), "assets")
+  end
+  define_theme()
 end
 
 export
