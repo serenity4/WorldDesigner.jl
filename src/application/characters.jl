@@ -66,7 +66,20 @@ function generate_character_tab(info::CharacterInfo)
   place(at(name, :left), at(panel, :center) |> at(5, 0))
   align(at(name, :top), :horizontal, at(go_back_arrow, :top) |> at(0, -4))
 
-  add_widgets(go_back_arrow, portrait, name)
+  @set_name namespace race = Text(styled"{black:$(@something(info.race, \"Race\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = race -> update_character_info(info; race))
+  place(at(race, :left), at(name, :left) |> at(0, -3))
+
+  @set_name namespace gender = Text(styled"{black:$(@something(info.gender, \"Gender\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = gender -> update_character_info(info; gender))
+  place(at(gender, :left), at(race, :left) |> at(0, -1.5))
+
+  @set_name namespace social_function = Text(styled"{black:$(@something(info.social_function, \"Social function\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = social_function -> update_character_info(info; social_function))
+  place(at(social_function, :left), at(gender, :left) |> at(0, -1.5))
+
+  @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_character_info(info; description))
+  place(at(description, :left), at(portrait, :right) |> at(1.5, 0))
+  align(at(description, :top), :horizontal, at(social_function, :top) |> at(0, -3))
+
+  add_widgets(go_back_arrow, portrait, name, race, gender, social_function, description)
 end
 
 function update_character_info(info::CharacterInfo; kwargs...)

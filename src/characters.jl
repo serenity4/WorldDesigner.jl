@@ -1,9 +1,7 @@
-@enum Gender MALE FEMALE NONBINARY
-
 struct CharacterInfo
   name::String
   race::Optional{String}
-  gender::Optional{Gender}
+  gender::Optional{String}
   social_function::Optional{String}
   date_of_birth::Optional{DateTime}
   place_of_birth::Optional{String}

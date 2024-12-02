@@ -18,6 +18,7 @@ include("application/state.jl")
 include("application/main.jl")
 include("application/characters.jl")
 
+include("show.jl")
 include("theme.jl")
 
 function __init__()
