@@ -20,19 +20,12 @@ function start_app!(state::ApplicationState)
   distribute(left_tabs, :vertical, 1, :geometry)
   generate_active_tab!(state)
 
-  # File menu.
-  file_menu_head = Button(() -> collapse!(file_menu), (3, 1); text = Text("File"))
-  file_menu_item_1 = MenuItem(Text("New file"), (3, 1)) do; end
-  file_menu_item_2 = MenuItem(Text("Open..."), (3, 1)) do; end
-  file_menu_item_3 = MenuItem(Anvil.exit, Text("Exit"), (3, 1), 'x')
-  @set_name file_menu = Menu(file_menu_head, [file_menu_item_1, file_menu_item_2, file_menu_item_3], 'F')
-  place(file_menu |> at(:top_left), app.windows[app.window] |> at(:top_left))
-
-  # Edit menu.
-  edit_menu_head = Button(() -> collapse!(edit_menu), (3, 1); text = Text("Edit"))
-  edit_menu_item_1 = MenuItem(Text("Regenerate"), (3, 1)) do; end
-  @set_name edit_menu = Menu(edit_menu_head, [edit_menu_item_1], 'E')
-  place(edit_menu |> at(:top_left), file_menu |> at(:top_right))
+  # Navigation menu.
+  use_interaction_set(:navigation) do
+    file_menu = add_file_menu!(state)
+    edit_menu = add_edit_menu!(state)
+    place(edit_menu.head |> at(:top_left), file_menu.head |> at(:top_right))
+  end
 end
 
 function add_left_tab!(state, name)
@@ -46,7 +39,7 @@ function add_left_tab!(state, name)
     previous_tab == active_tab && return
     previous_tab == name && (text.value = styled"{black:$name}")
     active_tab == name && (text.value = styled"{red:$name}")
-    switch_tab!(state, active_tab)
+    switch_tab!(state)
   end
   add_callback(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
   place(text |> at(:center), tab |> at(0.2, 0))
@@ -56,7 +49,7 @@ end
 function generate_active_tab!(state::ApplicationState)
   @switch state.active_tab begin
     @case "Characters"
-    @with INTERACTION_SET => :central_panel generate_characters_tab!(state)
+    generate_characters_tab!(state)
 
     @case "Places"
     # TODO
@@ -65,7 +58,6 @@ function generate_active_tab!(state::ApplicationState)
   end
 end
 
-function switch_tab!(state::ApplicationState, tab::String)
-  wipe_central_panel()
+function switch_tab!(state::ApplicationState)
   generate_active_tab!(state)
 end

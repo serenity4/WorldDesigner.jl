@@ -9,21 +9,19 @@ ApplicationState() = ApplicationState("Characters", [])
 
 get_state() = app.state::ApplicationState
 
-const INTERACTION_SET = ScopedValue{Symbol}()
+get_interaction_set(set::Symbol) = get!(InteractionSet, get_state().interaction_sets, set)
 
-interaction_set(state::ApplicationState, set::Symbol) = get!(InteractionSet, state.interaction_sets, set)
+use_interaction_set(set::Symbol) = Anvil.use_interaction_set(get_interaction_set(set))
+use_interaction_set(f, set::Symbol) = Anvil.use_interaction_set(f, get_interaction_set(set))
 
-add_widget!(state, widget) = push!(interaction_set(state, INTERACTION_SET[]), widget)
-add_widgets!(state, widget, widgets...) = for widget in (widget, widgets...) add_widget!(state, widget) end
-add_widget(widget, widgets...) = add_widget!(app.state, widget, widgets...)
-add_widgets(widget, widgets...) = add_widgets!(app.state, widget, widgets...)
+function reuse_interaction_set(set::Symbol)
+  use_interaction_set(set)
+  wipe!(current_interaction_set())
+end
 
-remove_widget!(state, widget) = delete!(interaction_set(state.interaction_sets, INTERACTION_SET[]), widget)
-remove_widgets!(state, widget, widgets...) = for widget in (widget, widgets...) remove_widget!(state, widget) end
-remove_widget(widget, widgets...) = remove_widget!(app.state, widget, widgets...)
-remove_widgets(widget, widgets...) = remove_widgets!(app.state, widget, widgets...)
-
-function wipe_central_panel()
-  set = interaction_set(get_state(), :central_panel)
-  wipe!(set)
+function reuse_interaction_set(f, set::Symbol)
+  use_interaction_set(set) do
+    f()
+    wipe!(current_interaction_set())
+  end
 end

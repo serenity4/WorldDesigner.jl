@@ -1,4 +1,5 @@
 function generate_characters_tab!(state::ApplicationState)
+  reuse_interaction_set(:central_panel)
   @get_widget central_panel
   isempty(state.characters) && return
   list = map(character_list_entry, state.characters)
@@ -16,8 +17,7 @@ function character_list_entry(info::CharacterInfo)
   @set_name namespace icon = character_icon(info.portrait)
   @set_name namespace background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   add_callback(background, BUTTON_PRESSED) do input
-    wipe_central_panel()
-    @with INTERACTION_SET => :central_panel generate_character_tab(info)
+    generate_character_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
   put_behind(background, icon)
@@ -25,7 +25,6 @@ function character_list_entry(info::CharacterInfo)
   pin(background, :top_left, at(icon, :top_right))
   pin(background, :bottom_left, at(icon, :bottom_right))
   pin(background, :right, at(central_panel, :right); offset = -2)
-  add_widgets(name, icon, background)
   Group(name, icon, background)
 end
 
@@ -38,8 +37,7 @@ character_portrait(::Nothing) = character_portrait_placeholder()
 character_portrait_placeholder() = character_portrait("character-icon-placeholder.png")
 
 function regenerate_characters_tab(token = nothing)
-  wipe_central_panel()
-  @with INTERACTION_SET => :central_panel generate_characters_tab!(app.state)
+  generate_characters_tab!(app.state)
   isnothing(token) && return
   token[] === nothing && return
   unbind(token[])
@@ -47,6 +45,7 @@ function regenerate_characters_tab(token = nothing)
 end
 
 function generate_character_tab(info::CharacterInfo)
+  reuse_interaction_set(:central_panel)
   namespace = "character/$(info.name)"
   panel = @get_widget central_panel
 
@@ -78,8 +77,6 @@ function generate_character_tab(info::CharacterInfo)
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_character_info(info; description))
   place(at(description, :left), at(portrait, :right) |> at(1.5, 0))
   align(at(description, :top), :horizontal, at(social_function, :top) |> at(0, -3))
-
-  add_widgets(go_back_arrow, portrait, name, race, gender, social_function, description)
 end
 
 function update_character_info(info::CharacterInfo; kwargs...)

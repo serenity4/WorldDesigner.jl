@@ -12,9 +12,9 @@ const Optional{T} = Union{T, Nothing}
 const FilePath = String
 
 include("characters.jl")
-include("interaction_set.jl")
 
 include("application/state.jl")
+include("application/navigation_menu.jl")
 include("application/main.jl")
 include("application/characters.jl")
 
