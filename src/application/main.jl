@@ -32,13 +32,13 @@ function add_left_tab!(state, name)
   namespace = "tabs"
   scale = 6
   @set_name namespace tab = Rectangle("tab-left.png", scale = 6)
-  color = state.active_tab == name ? :red : :black
-  @set_name namespace text = Text(styled"{$color:$name}"; font = "MedievalSharp", size = 0.7)
+  color = ifelse(state.active_tab == name, ACTIVE_TAB_COLOR, INACTIVE_TAB_COLOR)
+  @set_name namespace text = Text(styled"{color=$color:$name}"; font = "MedievalSharp", size = 0.7)
   put_behind(tab, text)
   observe!(state, :active_tab) do previous_tab, active_tab
     previous_tab == active_tab && return
-    previous_tab == name && (text.value = styled"{black:$name}")
-    active_tab == name && (text.value = styled"{red:$name}")
+    previous_tab == name && (text.value = styled"{color=$INACTIVE_TAB_COLOR:$name}")
+    active_tab == name && (text.value = styled"{color=$ACTIVE_TAB_COLOR:$name}")
     switch_tab!(state)
   end
   add_callback(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
