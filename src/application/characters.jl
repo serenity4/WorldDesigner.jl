@@ -62,8 +62,8 @@ function generate_character_tab(info::CharacterInfo)
   pin(portrait, :right, at(panel, :right) |> -0.6width())
 
   @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0, editable = true, on_edit = name -> update_character_info(info; name))
-  place(at(name, :left), at(panel, :center) |> at(5, 0))
-  align(at(name, :top), :horizontal, at(go_back_arrow, :top) |> at(0, -4))
+  place(at(name, :left), at(panel, :center) |> 0.1width())
+  align(at(name, :top), :horizontal, at(portrait, :top))
 
   @set_name namespace race = Text(styled"{black:$(@something(info.race, \"Race\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = race -> update_character_info(info; race))
   place(at(race, :left), at(name, :left) |> at(0, -3))
