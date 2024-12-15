@@ -52,8 +52,10 @@ function generate_active_tab!(state::ApplicationState)
     generate_characters_tab!(state)
 
     @case "Places"
+    reuse_interaction_set(:central_panel)
     # TODO
     @case "Events"
+    reuse_interaction_set(:central_panel)
     # TODO
   end
 end
