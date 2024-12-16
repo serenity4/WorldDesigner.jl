@@ -14,9 +14,10 @@ function character_list_entry(info::CharacterInfo)
   namespace = "characters/$(info.name)"
   @get_widget central_panel
   @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 0.7)
-  @set_name namespace icon = character_icon(info.portrait)
+  @set_name namespace icon = character_icon(info.illustration)
   @set_name namespace background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   add_callback(background, BUTTON_PRESSED) do input
+    is_left_click(input) || return
     generate_character_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
@@ -28,13 +29,13 @@ function character_list_entry(info::CharacterInfo)
   Group(name, icon, background)
 end
 
-character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
+character_icon(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus, illustration.zoom)))
 character_icon(::Nothing) = character_icon_placeholder()
-character_icon_placeholder() = character_icon("characters/character-icon-placeholder.png")
+character_icon_placeholder() = character_icon(Illustration("characters/character-icon-placeholder.png"))
 
-character_portrait(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true, mode = ImageModeCropped()))
+character_portrait(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus)))
 character_portrait(::Nothing) = character_portrait_placeholder()
-character_portrait_placeholder() = character_portrait("characters/character-icon-placeholder.png")
+character_portrait_placeholder() = character_portrait(Illustration("characters/character-icon-placeholder.png"))
 
 function regenerate_characters_tab(token = nothing)
   generate_characters_tab!(app.state)
@@ -55,15 +56,15 @@ function generate_character_tab(info::CharacterInfo)
   token[] = bind([key"backspace", key"escape"] .=> () -> regenerate_characters_tab(token))
   add_callback(input -> regenerate_characters_tab(token), go_back_arrow, BUTTON_PRESSED)
 
-  @set_name namespace portrait = character_portrait(info.portrait)
-  pin(portrait, :left, at(panel, :left) |> 0.1width())
-  pin(portrait, :top, at(panel, :top) |> -0.2height())
-  pin(portrait, :bottom, at(panel, :bottom) |> 0.3height())
-  pin(portrait, :right, at(panel, :right) |> -0.6width())
+  @set_name namespace illustration = character_portrait(info.illustration)
+  pin(illustration, :left, at(panel, :left) |> 0.1width())
+  pin(illustration, :top, at(panel, :top) |> -0.2height())
+  pin(illustration, :bottom, at(panel, :bottom) |> 0.3height())
+  pin(illustration, :right, at(panel, :right) |> -0.6width())
 
   @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0, editable = true, on_edit = name -> update_character_info(info; name))
   place(at(name, :left), at(panel, :center) |> 0.1width())
-  align(at(name, :top), :horizontal, at(portrait, :top))
+  align(at(name, :top), :horizontal, at(illustration, :top))
 
   @set_name namespace race = Text(styled"{black:$(@something(info.race, \"Race\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = race -> update_character_info(info; race))
   place(at(race, :left), at(name, :left) |> at(0, -3))
@@ -75,7 +76,7 @@ function generate_character_tab(info::CharacterInfo)
   place(at(social_function, :left), at(gender, :left) |> at(0, -1.5))
 
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_character_info(info; description))
-  place(at(description, :left), at(portrait, :right) |> at(1.5, 0))
+  place(at(description, :left), at(illustration, :right) |> at(1.5, 0))
   align(at(description, :top), :horizontal, at(social_function, :top) |> at(0, -3))
 
   token

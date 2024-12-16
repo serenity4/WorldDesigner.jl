@@ -17,6 +17,7 @@ function place_list_entry(info::PlaceInfo)
   @set_name namespace icon = place_icon(info.illustration)
   @set_name namespace background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   add_callback(background, BUTTON_PRESSED) do input
+    is_left_click(input) || return
     generate_place_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
@@ -28,13 +29,13 @@ function place_list_entry(info::PlaceInfo)
   Group(name, icon, background)
 end
 
-place_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
+place_icon(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus, illustration.zoom)))
 place_icon(::Nothing) = place_icon_placeholder()
-place_icon_placeholder() = place_icon("places/place-illustration-placeholder.png")
+place_icon_placeholder() = place_icon(Illustration("places/place-illustration-placeholder.png"))
 
-place_illustration(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true, mode = ImageModeCropped()))
+place_illustration(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus)))
 place_illustration(::Nothing) = place_illustration_placeholder()
-place_illustration_placeholder() = place_illustration("places/place-illustration-placeholder.png")
+place_illustration_placeholder() = place_illustration(Illustration("places/place-illustration-placeholder.png"))
 
 function regenerate_places_tab(token = nothing)
   generate_places_tab!(app.state)

@@ -17,6 +17,7 @@ function event_list_entry(info::EventInfo)
   @set_name namespace icon = event_icon(info.illustration)
   @set_name namespace background = Rectangle((1, 1), RGB(0.7, 0.4, 0.1))
   add_callback(background, BUTTON_PRESSED) do input
+    is_left_click(input) || return
     generate_event_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
@@ -28,13 +29,13 @@ function event_list_entry(info::EventInfo)
   Group(name, icon, background)
 end
 
-event_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
+event_icon(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus, illustration.zoom)))
 event_icon(::Nothing) = event_icon_placeholder()
-event_icon_placeholder() = event_icon("events/event-illustration-placeholder.png")
+event_icon_placeholder() = event_icon(Illustration("events/event-illustration-placeholder.png"))
 
-event_illustration(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true, mode = ImageModeCropped()))
+event_illustration(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus)))
 event_illustration(::Nothing) = event_illustration_placeholder()
-event_illustration_placeholder() = event_illustration("events/event-illustration-placeholder.png")
+event_illustration_placeholder() = event_illustration(Illustration("events/event-illustration-placeholder.png"))
 
 function regenerate_events_tab(token = nothing)
   generate_events_tab!(app.state)

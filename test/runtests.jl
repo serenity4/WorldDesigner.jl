@@ -1,5 +1,5 @@
 using WorldDesigner
-using WorldDesigner: app, execute
+using WorldDesigner: app, execute, CharacterNode
 using Logging
 using Test
 
@@ -14,7 +14,13 @@ ENV["JULIA_DEBUG"] = "WorldDesigner,Anvil"
 default_tab = "Characters"
 characters = [
   CharacterInfo("Unknown"),
-  CharacterInfo("Kaven"; portrait = "characters/Kaven.jpg"),
+  CharacterInfo("Kaven"; illustration = Illustration("characters/Kaven.jpg", (0.45, 0.5), 1.5)),
+  CharacterInfo("Keena"; illustration = Illustration("characters/Keena.jpg", (0.5, 0.73), 2)),
+  CharacterInfo("Lyv"; illustration = Illustration("characters/Lyv.jpg", (0.5, 0.6), 1.4)),
+  CharacterInfo("Nyra"; illustration = Illustration("characters/Nyra.jpg", (0.45, 0.63), 3)),
+  CharacterInfo("Ramoz"; illustration = Illustration("characters/Ramoz.jpg", (0.57, 0.75), 2.5)),
+  CharacterInfo("Velia"; illustration = Illustration("characters/Velia.jpg")),
+  CharacterInfo("Zhevyr"; illustration = Illustration("characters/Zhevyr.jpg")),
 ]
 places = [
   PlaceInfo("Academy of Magic"; illustration = "places/Academy of Magic.jpg"),
@@ -25,6 +31,15 @@ events = [
   EventInfo("Corruption of the volcano"; illustration = "events/Fel volcano.jpg"),
 ]
 state = ApplicationState(default_tab; characters, places, events)
+append!(state.graph.characters, CharacterNode.([
+  (1, 1),
+  (-3, 0),
+  (5, 1),
+  (10, -4),
+  (7, 4),
+  (-4, -3),
+  (-4, 5),
+], characters[2:end]))
 
 main(state)
 
@@ -35,6 +50,8 @@ main(state)
   @execute state.active_tab = "Places"
   sleep(0.1)
   @execute state.active_tab = "Events"
+  sleep(0.1)
+  @execute state.active_tab = "World graph"
   sleep(0.1)
 
   # Updating character info.

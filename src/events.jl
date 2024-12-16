@@ -1,6 +1,6 @@
 struct EventInfo
   name::String
-  illustration::Optional{FilePath}
+  illustration::Optional{Illustration}
   description::Optional{String}
 end
 

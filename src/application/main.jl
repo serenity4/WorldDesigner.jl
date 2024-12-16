@@ -13,7 +13,8 @@ function start_app!(state::ApplicationState)
   characters_tab = add_left_tab!(state, "Characters")
   places_tab = add_left_tab!(state, "Places")
   events_tab = add_left_tab!(state, "Events")
-  left_tabs = EntityID[characters_tab, places_tab, events_tab]
+  world_graph_tab = add_left_tab!(state, "World graph")
+  left_tabs = EntityID[characters_tab, places_tab, events_tab, world_graph_tab]
 
   window = app.windows[app.window]
   @set_name central_panel = Rectangle((1, 1), "parchment-background-1.jpg", ImageParameters(mode = ImageModeTiled(scale = 0.03), is_opaque = true))
@@ -63,6 +64,9 @@ function generate_active_tab!(state::ApplicationState)
 
     @case "Events"
     generate_events_tab!(state)
+
+    @case "World graph"
+    generate_world_graph_tab!(state)
   end
 end
 
