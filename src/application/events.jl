@@ -3,7 +3,7 @@ function generate_events_tab!(state::ApplicationState)
   @get_widget central_panel
   isempty(state.events) && return
   list = map(event_list_entry, state.events)
-  place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -5)))
+  place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -2)))
   for item in list
     align(item |> at(:left), :vertical, list[1] |> at(:left))
   end
