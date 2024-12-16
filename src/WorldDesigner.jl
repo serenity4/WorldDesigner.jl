@@ -12,11 +12,15 @@ const Optional{T} = Union{T, Nothing}
 const FilePath = String
 
 include("characters.jl")
+include("places.jl")
+include("events.jl")
 
 include("application/state.jl")
 include("application/navigation_menu.jl")
 include("application/main.jl")
 include("application/characters.jl")
+include("application/places.jl")
+include("application/events.jl")
 
 include("show.jl")
 include("theme.jl")
@@ -34,6 +38,8 @@ export
         Anvil,
 
         CharacterInfo,
+        PlaceInfo,
+        EventInfo,
         ApplicationState
 
 end

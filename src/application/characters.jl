@@ -30,11 +30,11 @@ end
 
 character_icon(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true))
 character_icon(::Nothing) = character_icon_placeholder()
-character_icon_placeholder() = character_icon("character-icon-placeholder.png")
+character_icon_placeholder() = character_icon("characters/character-icon-placeholder.png")
 
 character_portrait(asset::String) = Rectangle((3, 3), texture_file(asset), ImageParameters(is_opaque = true, mode = ImageModeCropped()))
 character_portrait(::Nothing) = character_portrait_placeholder()
-character_portrait_placeholder() = character_portrait("character-icon-placeholder.png")
+character_portrait_placeholder() = character_portrait("characters/character-icon-placeholder.png")
 
 function regenerate_characters_tab(token = nothing)
   generate_characters_tab!(app.state)

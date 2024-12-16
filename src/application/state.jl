@@ -1,11 +1,14 @@
 @observable mutable struct ApplicationState
   active_tab::String
   characters::Vector{CharacterInfo}
+  places::Vector{PlaceInfo}
+  events::Vector{EventInfo}
   interaction_sets::Dict{Symbol, InteractionSet}
 end
 
-ApplicationState(active_tab, characters) = ApplicationState(active_tab, characters, Dict())
-ApplicationState() = ApplicationState("Characters", [])
+function ApplicationState(active_tab = "Characters"; characters = [], places = [], events = [])
+  ApplicationState(active_tab, characters, places, events, Dict())
+end
 
 get_state() = app.state::ApplicationState
 

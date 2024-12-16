@@ -2,6 +2,14 @@ main(state = ApplicationState(); async = false) = Anvil.main(() -> start_app!(st
 
 function start_app!(state::ApplicationState)
   app.state = state
+  empty!(state.interaction_sets)
+  observe!(state, :active_tab) do previous_tab, active_tab
+    previous_tab == active_tab && return
+    generate_active_tab!(state)
+  end
+  finalizer(app) do _
+    unobserve!(state)
+  end
   characters_tab = add_left_tab!(state, "Characters")
   places_tab = add_left_tab!(state, "Places")
   events_tab = add_left_tab!(state, "Events")
@@ -39,7 +47,6 @@ function add_left_tab!(state, name)
     previous_tab == active_tab && return
     previous_tab == name && (text.value = styled"{color=$INACTIVE_TAB_COLOR:$name}")
     active_tab == name && (text.value = styled"{color=$ACTIVE_TAB_COLOR:$name}")
-    switch_tab!(state)
   end
   add_callback(input -> is_left_click(input) && (state.active_tab = name), tab, BUTTON_PRESSED)
   place(text |> at(:center), tab |> at(0.2, 0))
@@ -52,14 +59,17 @@ function generate_active_tab!(state::ApplicationState)
     generate_characters_tab!(state)
 
     @case "Places"
-    reuse_interaction_set(:central_panel)
-    # TODO
+    generate_places_tab!(state)
+
     @case "Events"
-    reuse_interaction_set(:central_panel)
-    # TODO
+    generate_events_tab!(state)
   end
 end
 
-function switch_tab!(state::ApplicationState)
+function switch_tab!(state::ApplicationState, tab)
+  previous_tab = state.active_tab
+  previous_tab == tab && return
+  previous_tab == name && (text.value = styled"{color=$INACTIVE_TAB_COLOR:$name}")
+  tab == name && (text.value = styled"{color=$ACTIVE_TAB_COLOR:$name}")
   generate_active_tab!(state)
 end
