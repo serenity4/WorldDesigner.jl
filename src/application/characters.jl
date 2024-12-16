@@ -77,6 +77,8 @@ function generate_character_tab(info::CharacterInfo)
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_character_info(info; description))
   place(at(description, :left), at(portrait, :right) |> at(1.5, 0))
   align(at(description, :top), :horizontal, at(social_function, :top) |> at(0, -3))
+
+  token
 end
 
 function update_character_info(info::CharacterInfo; kwargs...)

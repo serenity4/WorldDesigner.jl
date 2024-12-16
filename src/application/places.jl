@@ -68,6 +68,8 @@ function generate_place_tab(info::PlaceInfo)
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_place_info(info; description))
   place(at(description, :left), at(illustration, :right) |> at(1.5, 0))
   align(at(description, :top), :horizontal, at(name, :top) |> at(0, -3))
+
+  token
 end
 
 function update_place_info(info::PlaceInfo; kwargs...)

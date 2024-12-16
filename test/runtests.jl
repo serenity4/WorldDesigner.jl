@@ -11,7 +11,6 @@ ENV["JULIA_DEBUG"] = "WorldDesigner,Anvil"
 # ENV["ANVIL_LOG_KEY_PRESS"] = true
 # ENV["ANVIL_RELEASE"] = true # may circumvent issues with validation layers
 
-
 default_tab = "Characters"
 characters = [
   CharacterInfo("Unknown"),
@@ -31,13 +30,48 @@ main(state)
 
 @testset "WorldDesigner.jl" begin
   main(state; async = true)
-  fetch(execute(() -> state.active_tab = "Characters", app.task))
+  @execute state.active_tab = "Characters"
   sleep(0.1)
-  fetch(execute(() -> state.active_tab = "Places", app.task))
+  @execute state.active_tab = "Places"
   sleep(0.1)
-  fetch(execute(() -> state.active_tab = "Events", app.task))
+  @execute state.active_tab = "Events"
   sleep(0.1)
-  fetch(execute(() -> state.active_tab = "Characters", app.task))
+
+  # Updating character info.
+  @execute state.active_tab = "Characters"
   sleep(0.1)
+  character = characters[2]
+  token = @execute generate_character_tab(character)
+  sleep(0.1)
+  @execute update_character_info(character; description = "No description yet!")
+  character = characters[2]
+  @test character.description == "No description yet!"
+  @execute regenerate_characters_tab(token)
+  token = @execute generate_character_tab(character)
+
+  # Updating place info.
+  @execute state.active_tab = "Places"
+  sleep(0.1)
+  place = places[2]
+  token = @execute generate_place_tab(place)
+  sleep(0.1)
+  @execute update_place_info(place; description = "No description yet!")
+  place = places[2]
+  @test place.description == "No description yet!"
+  @execute regenerate_places_tab(token)
+  token = @execute generate_place_tab(place)
+
+  # Updating event info.
+  @execute state.active_tab = "Events"
+  sleep(0.1)
+  event = events[1]
+  token = @execute generate_event_tab(event)
+  sleep(0.1)
+  @execute update_event_info(event; description = "No description yet!")
+  event = events[1]
+  @test event.description == "No description yet!"
+  @execute regenerate_events_tab(token)
+  token = @execute generate_event_tab(event)
+
   Anvil.exit()
 end;
