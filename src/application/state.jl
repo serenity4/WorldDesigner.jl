@@ -25,7 +25,7 @@ end
 
 function reuse_interaction_set(f, set::Symbol)
   use_interaction_set(set) do
-    f()
     wipe!(current_interaction_set())
+    f()
   end
 end

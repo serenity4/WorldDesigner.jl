@@ -7,9 +7,7 @@ function start_app!(state::ApplicationState)
     previous_tab == active_tab && return
     generate_active_tab!(state)
   end
-  finalizer(app) do _
-    unobserve!(state)
-  end
+  finalizer(_ -> unobserve!(state), app)
   characters_tab = add_left_tab!(state, "Characters")
   places_tab = add_left_tab!(state, "Places")
   events_tab = add_left_tab!(state, "Events")

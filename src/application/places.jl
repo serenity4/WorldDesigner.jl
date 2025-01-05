@@ -21,6 +21,7 @@ function place_list_entry(info::PlaceInfo)
     generate_place_tab(info)
   end
   place_after(name, icon; spacing = 1.0)
+  put_in_front(background, central_panel)
   put_behind(background, icon)
   put_behind(background, name)
   pin(background, :top_left, at(icon, :top_left))

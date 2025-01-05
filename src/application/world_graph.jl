@@ -26,6 +26,17 @@ function add_character_nodes(graph::WorldGraph)
         node = graph.characters[i]
         graph.characters[i] = @set node.coordinates = coordinates[]
       end
+      add_callback(icon, POINTER_ENTERED) do input
+        reuse_interaction_set(:summary_on_hover) do
+          # TODO: Add background image.
+          @set_name namespace frame = Rectangle((5, 3), RGB(1, 0, 0))
+          place(at(frame, :bottom_left), at(icon, :top_right))
+          set_z(frame, Inf)
+        end
+      end
+      add_callback(icon, POINTER_EXITED) do input
+        reuse_interaction_set(() -> nothing, :summary_on_hover)
+      end
     end
   end
 end

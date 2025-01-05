@@ -4,9 +4,10 @@ using Anvil
 using Anvil: Text, bind
 using MLStyle: @when, @match, @switch
 using ForwardMethods: @forward_methods, @forward_interface
+using Reexport
 
 using Base.ScopedValues: ScopedValue, @with
-using Dates
+@reexport using Dates
 
 const Optional{T} = Union{T, Nothing}
 const FilePath = String
