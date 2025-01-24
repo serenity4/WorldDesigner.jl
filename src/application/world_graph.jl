@@ -14,7 +14,7 @@ function add_character_nodes(graph::WorldGraph)
   (; size) = graph.character_options
   for character in graph.characters
     @set_name namespace icon = character_icon(character.info.illustration)
-    set_geometry(icon, (size, size))
+    set_geometry(icon, FilledCircle(size/2))
     coordinates = Ref(character.coordinates)
     place(icon, central_panel |> at(coordinates))
     let origin = Ref(P2(0, 0)), last_displacement = Ref(P2(0, 0))

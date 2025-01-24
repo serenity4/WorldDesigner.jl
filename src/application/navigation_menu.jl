@@ -22,6 +22,7 @@ generate_menu_item(f, text::AbstractString, dimensions; shortcut = nothing) = ge
 function generate_menu_item(f, text::Text, dimensions; shortcut = nothing)
   background = Rectangle(dimensions, Anvil.MENU_ITEM_COLOR)
   place(at(text, :left), at(background, :left) |> at(0.2, 0.0))
+  put_in_front(text, background)
   MenuItem(f, background; text, on_active = on_active(background), shortcut)
 end
 
