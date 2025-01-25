@@ -55,6 +55,8 @@ export
         regenerate_places_tab,
         update_place_info,
 
+        ElementType, ELEMENT_TYPE_CHARACTER, ELEMENT_TYPE_PLACE, ELEMENT_TYPE_EVENT,
+        ElementInfo,
         EventInfo,
         generate_event_tab,
         regenerate_events_tab,

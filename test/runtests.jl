@@ -26,9 +26,12 @@ places = [
   PlaceInfo("Academy of Magic"; illustration = "places/Academy of Magic.jpg"),
   PlaceInfo("Ouros"; illustration = "places/Magic city - residential street.jpg"),
   PlaceInfo("Training grounds"; illustration = "places/Training grounds - 1.jpg"),
+  # TODO: Change name & illustration.
+  PlaceInfo("Simitar"; illustration = "events/Fel volcano.jpg"),
 ]
 events = [
-  EventInfo("Corruption of the volcano"; illustration = "events/Fel volcano.jpg"),
+  EventInfo("Corruption of the volcano"; illustration = "events/Fel volcano.jpg", elements = [places[4]], date = Date(246, 6, 17)),
+  EventInfo("Welcoming ceremony"; illustration = "places/Academy of Magic.jpg", elements = [places[1]; characters[[2, 4, 5, 7, 8]]], date = Date(246, 5, 12)),
 ]
 state = ApplicationState(default_tab; characters, places, events)
 append!(state.graph.characters, CharacterNode.([
