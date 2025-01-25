@@ -49,7 +49,7 @@ function add_character_info_frame!(hide_summary_callback, graph, character, icon
     isnothing(node) && return
     (; info) = node
     parameters = ImageParameters(is_opaque = true, mode = ImageModeCropped())
-    @set_name namespace background = Rectangle((10, 10sqrt(2)), texture_file("parchment-background-3"), parameters)
+    @set_name namespace background = Rectangle((10, 3), texture_file("parchment-background-3"), parameters)
     @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 1.0)
 
     place(at(background, :bottom_left), at(icon, :top_right))
