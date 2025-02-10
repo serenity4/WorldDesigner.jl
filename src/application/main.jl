@@ -23,8 +23,8 @@ function start_app!(state::ApplicationState)
   for left_tab in left_tabs
     place(left_tab |> at(:right), central_panel |> at(:left))
   end
-  align(characters_tab |> at(:top), :horizontal, central_panel |> at(:top) |> at(-2))
-  distribute(left_tabs, :vertical, 1, :geometry)
+  align(characters_tab |> at(:top), central_panel |> at(:top) |> at(-2), :horizontal)
+  distribute(left_tabs, :vertical; spacing = 1, mode = :geometry)
   generate_active_tab!(state)
 
   # Navigation menu.

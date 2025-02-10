@@ -38,8 +38,8 @@ function generate_file_menu!(menu::Menu, state::ApplicationState)
 
   push!(items, generate_menu_item(Anvil.exit, "Exit", dimensions; shortcut = 'x'))
 
-  align([at(item.widget, :left) for item in items], :vertical, at(menu.head, :left))
-  distribute([menu.head; [item.widget for item in items]], :vertical, 0.0, :geometry)
+  align([at(item.widget, :left) for item in items], at(menu.head, :left), :vertical)
+  distribute([menu.head; [item.widget for item in items]], :vertical; spacing = 0, mode = :geometry)
   add_menu_items!(menu, items)
 end
 
@@ -50,7 +50,7 @@ function generate_edit_menu!(menu::Menu, state::ApplicationState)
   push!(items, generate_menu_item("Regenerate", dimensions) do
   end)
 
-  align([at(item.widget, :left) for item in items], :vertical, at(menu.head, :left))
-  distribute([menu.head; [item.widget for item in items]], :vertical, 0.0, :geometry)
+  align([at(item.widget, :left) for item in items], at(menu.head, :left), :verticals)
+  distribute([menu.head; [item.widget for item in items]], :vertical; spacing = 0, mode = :geometry)
   add_menu_items!(menu, items)
 end

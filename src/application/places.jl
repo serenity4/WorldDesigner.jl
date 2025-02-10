@@ -5,9 +5,9 @@ function generate_places_tab!(state::ApplicationState)
   list = map(place_list_entry, state.places)
   place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -2)))
   for item in list
-    align(item |> at(:left), :vertical, list[1] |> at(:left))
+    align(item |> at(:left), list[1] |> at(:left), :vertical)
   end
-  distribute(list, :vertical, 1, :geometry)
+  distribute(list, :vertical; spacing = 1, mode = :geometry)
 end
 
 function place_list_entry(info::PlaceInfo)
@@ -65,11 +65,11 @@ function generate_place_tab(info::PlaceInfo)
 
   @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0, editable = true, on_edit = name -> update_place_info(info; name))
   place(at(name, :left), at(panel, :center) |> at(5, 0))
-  align(at(name, :top), :horizontal, at(go_back_arrow, :top) |> at(0, -4))
+  align(at(name, :top), at(go_back_arrow, :top) |> at(0, -4), :horizontal)
 
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_place_info(info; description))
   place(at(description, :left), at(illustration, :right) |> at(1.5, 0))
-  align(at(description, :top), :horizontal, at(name, :top) |> at(0, -3))
+  align(at(description, :top), at(name, :top) |> at(0, -3), :horizontal)
 
   token
 end

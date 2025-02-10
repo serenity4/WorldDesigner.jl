@@ -5,9 +5,9 @@ function generate_characters_tab!(state::ApplicationState)
   list = map(character_list_entry, state.characters)
   place(list[1] |> at(:top_left), central_panel |> at(:top_left) |> at((2, -2)))
   for item in list
-    align(item |> at(:left), :vertical, list[1] |> at(:left))
+    align(item |> at(:left), list[1] |> at(:left), :vertical)
   end
-  distribute(list, :vertical, 1, :geometry)
+  distribute(list, :vertical; spacing = 1, mode = :geometry)
 end
 
 function character_list_entry(info::CharacterInfo)
@@ -65,7 +65,7 @@ function generate_character_tab(info::CharacterInfo)
 
   @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 2.0, editable = true, on_edit = name -> update_character_info(info; name))
   place(at(name, :left), at(panel, :center) |> 0.1width())
-  align(at(name, :top), :horizontal, at(illustration, :top))
+  align(at(name, :top), at(illustration, :top), :horizontal)
 
   @set_name namespace race = Text(styled"{black:$(@something(info.race, \"Race\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = race -> update_character_info(info; race))
   place(at(race, :left), at(name, :left) |> at(0, -3))
@@ -78,7 +78,7 @@ function generate_character_tab(info::CharacterInfo)
 
   @set_name namespace description = Text(styled"{black:$(@something(info.description, \"Description\"))}"; font = "MedievalSharp", size = 1.0, editable = true, on_edit = description -> update_character_info(info; description))
   place(at(description, :left), at(illustration, :right) |> at(1.5, 0))
-  align(at(description, :top), :horizontal, at(social_function, :top) |> at(0, -3))
+  align(at(description, :top), at(social_function, :top) |> at(0, -3), :horizontal)
 
   token
 end
