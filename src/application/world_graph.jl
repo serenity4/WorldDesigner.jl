@@ -53,6 +53,9 @@ function add_character_info_frame!(hide_summary_callback, graph, character, icon
     @set_name namespace name = Text(styled"{black:$(info.name)}"; font = "MedievalSharp", size = 1.0)
 
     place(at(background, :bottom_left), at(icon, :top_right))
+    Layout.record!(app.systems.layout.engine, background) do outputs, inputs
+      clip_to_region!(outputs, inputs, get_geometry(@get_widget central_panel).rectangle, 0.3)
+    end
     # XXX: Putting the background or name in front or behind of one another
     # wrongly leads to one or none of them being rendered!
     place(at(name, :top), at(background, :top) |> at(-0.5))
@@ -62,6 +65,18 @@ function add_character_info_frame!(hide_summary_callback, graph, character, icon
     reuse_interaction_set(() -> nothing, :summary_on_hover)
     remove_callback(root, hide_summary_callback[])
   end
+end
+
+function clip_to_region!(outputs, inputs, region, padding)
+  outputs .= clip_to_region.(inputs, Ref(region), padding)
+end
+
+function clip_to_region(object, region, padding)
+  (; position, geometry) = object
+  min = region.bottom_left .- geometry.bottom_left .+ padding
+  max = region.top_right .- geometry.top_right .- padding
+  clipped = clamp.(position, min, max)
+  Layout.set_position(object, clipped)
 end
 
 function find_node(graph, character)
