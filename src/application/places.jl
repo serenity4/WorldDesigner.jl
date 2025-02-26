@@ -27,7 +27,7 @@ function place_list_entry(info::PlaceInfo)
   pin(background, :top_left, at(icon, :top_left))
   pin(background, :bottom_left, at(icon, :bottom_left))
   pin(background, :right, at(central_panel, :right); offset = -2)
-  Group(name, icon, background)
+  group(name, icon, background)
 end
 
 place_icon(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus, illustration.zoom)))

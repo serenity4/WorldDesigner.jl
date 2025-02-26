@@ -27,7 +27,7 @@ function character_list_entry(info::CharacterInfo)
   pin(background, :top_left, at(icon, :top_left))
   pin(background, :bottom_left, at(icon, :bottom_left))
   pin(background, :right, at(central_panel, :right); offset = -2)
-  Group(name, icon, background)
+  group(name, icon, background)
 end
 
 character_icon(illustration::Illustration) = Rectangle((3, 3), texture_file(illustration.asset), ImageParameters(is_opaque = true, mode = ImageModeCropped(; illustration.focus, illustration.zoom)))

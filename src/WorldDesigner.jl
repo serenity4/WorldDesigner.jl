@@ -1,7 +1,7 @@
 module WorldDesigner
 
 using Anvil
-using Anvil: Text, bind
+using Anvil: Text, bind, group
 using MLStyle: @when, @match, @switch
 using ForwardMethods: @forward_methods, @forward_interface
 using Reexport
