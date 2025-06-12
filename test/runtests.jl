@@ -5,6 +5,7 @@ using Test
 
 Logging.disable_logging(Logging.Info)
 # Logging.disable_logging(Logging.BelowMinLevel)
+ENV["VK_LAYER_MESSAGE_ID_FILTER"] = "VUID-VkSwapchainCreateInfoKHR-presentMode-02839"
 ENV["JULIA_DEBUG"] = "WorldDesigner,Anvil"
 # ENV["JULIA_DEBUG"] = "Anvil,CooperativeTasks"
 ENV["ANVIL_LOG_FRAMECOUNT"] = false

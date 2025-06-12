@@ -16,7 +16,7 @@ function add_character_nodes(graph::WorldGraph)
   for character in graph.characters
     @set_name namespace icon = character_icon(character.info.illustration)
     set_geometry(icon, FilledCircle(size/2))
-    coordinates = Ref(character.coordinates)
+    coordinates = Movable(character.coordinates)
     place(icon, central_panel |> at(coordinates))
     let origin = Ref(P2(0, 0)), last_displacement = Ref(P2(0, 0))
       add_callback(icon, DRAG, BUTTON_PRESSED; drag_threshold = 0.1) do input
@@ -85,7 +85,7 @@ function find_node(graph, character)
   i, graph.characters[i]
 end
 
-function displace_when_dragging!(location::Ref, origin::Ref, last_displacement::Ref, object, input::Input)
+function displace_when_dragging!(location, origin::Ref, last_displacement::Ref, object, input::Input)
   if is_left_click(input)
     origin[] = location[]
     last_displacement[] = origin[]
