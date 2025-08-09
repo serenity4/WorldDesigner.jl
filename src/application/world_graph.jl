@@ -13,6 +13,7 @@ function add_character_nodes(graph::WorldGraph)
   namespace = "world_graph/character_nodes"
   (; size) = graph.character_options
   (; root) = app.systems.event.ui
+  active = Ref{Optional{CharacterNode}}(nothing)
   for character in graph.characters
     @set_name namespace icon = character_icon(character.info.illustration)
     set_geometry(icon, FilledCircle(size/2))
@@ -20,6 +21,7 @@ function add_character_nodes(graph::WorldGraph)
     place(icon, central_panel |> at(coordinates))
     let origin = Ref(P2(0, 0)), last_displacement = Ref(P2(0, 0))
       add_callback(icon, DRAG, BUTTON_PRESSED; drag_threshold = 0.1) do input
+        active[] = character
         displace_when_dragging!(coordinates, origin, last_displacement, icon, input)
         input.type === DRAG || return
         i, node = find_node(graph, character)
@@ -32,6 +34,7 @@ function add_character_nodes(graph::WorldGraph)
           in(input.event.key_event.key_name, (:LCTL, :RCTL)) || return
           add_character_info_frame!(hide_summary_callback, graph, character, icon, namespace)
         end
+        active[] === nothing || active[] === character || return
         in(CTRL_MODIFIER, input.event.pointer_state.modifiers) && add_character_info_frame!(hide_summary_callback, graph, character, icon, namespace)
       end
       add_callback(icon, POINTER_EXITED) do input
@@ -39,6 +42,10 @@ function add_character_nodes(graph::WorldGraph)
         show_summary_callback[] = nothing
       end
     end
+  end
+  add_callback(app.windows[app.window], BUTTON_RELEASED) do input
+    active[] = nothing
+    propagate!(input)
   end
 end
 
